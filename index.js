@@ -9,7 +9,6 @@ const fs = require("fs");
 const crypto = require('crypto')
 var cors = require('cors');
 
-const express = require("express")
 const multer = require("multer")
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
@@ -17,6 +16,8 @@ const bodyParser = require('body-parser')
 const FILE_FIELD = 'xxzzy'
 
 const resolvers = require('./resolvers')
+
+const imageFactory = require('./imageFactory')
 
 const server = new GraphQLServer({
   typeDefs: './schema.graphql',
@@ -55,8 +56,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-
-
 app.post(
   "/upload",
   upload.single(FILE_FIELD),
@@ -64,11 +63,9 @@ app.post(
 
     if (path.extname(req.file.originalname).toLowerCase() === ".png") {
       console.log('file received', req.file.originalname);
-      console.log('final path', `${req.protocol}://${req.host}/${req.file.path}`)
+      console.log('final path', `${req.protocol}://${req.hostname}/${req.file.path}`)
       res
-        .status(200)
-        .contentType("text/plain")
-        .end("File uploaded!");
+        .json({file: req.file.path});
     } else {
       res
         .status(403)
@@ -78,6 +75,7 @@ app.post(
     }
   }
 );
+
 
 
 

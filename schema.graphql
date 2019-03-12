@@ -10,7 +10,7 @@ type Query {
 }
 
 type Mutation {
-    addJob( file: String!): Job!
+    addJob( file: String!, fileCrypt: String!): Job!
     completeJob(id: ID!): Job!
 
 }
@@ -18,5 +18,13 @@ type Mutation {
 type Job {
     id: ID!
     file: String!
-    completed: Boolean!
+    fileCrypt: String!
+    status: Status!
+}
+
+enum Status {
+    COMPLETED
+    ERROR
+    IN_PROGRESS
+    WAITING
 }

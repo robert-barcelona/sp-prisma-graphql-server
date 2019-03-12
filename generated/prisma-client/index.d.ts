@@ -108,23 +108,35 @@ export type JobOrderByInput =
   | "id_DESC"
   | "file_ASC"
   | "file_DESC"
-  | "completed_ASC"
-  | "completed_DESC"
+  | "fileCrypt_ASC"
+  | "fileCrypt_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type Status = "COMPLETED" | "ERROR" | "IN_PROGRESS" | "WAITING";
+
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export interface JobCreateInput {
   file: String;
-  completed: Boolean;
+  fileCrypt: String;
+  status: Status;
 }
 
 export interface JobUpdateInput {
   file?: String;
-  completed?: Boolean;
+  fileCrypt?: String;
+  status?: Status;
+}
+
+export interface JobUpdateManyMutationInput {
+  file?: String;
+  fileCrypt?: String;
+  status?: Status;
 }
 
 export interface JobWhereInput {
@@ -156,16 +168,27 @@ export interface JobWhereInput {
   file_not_starts_with?: String;
   file_ends_with?: String;
   file_not_ends_with?: String;
-  completed?: Boolean;
-  completed_not?: Boolean;
+  fileCrypt?: String;
+  fileCrypt_not?: String;
+  fileCrypt_in?: String[] | String;
+  fileCrypt_not_in?: String[] | String;
+  fileCrypt_lt?: String;
+  fileCrypt_lte?: String;
+  fileCrypt_gt?: String;
+  fileCrypt_gte?: String;
+  fileCrypt_contains?: String;
+  fileCrypt_not_contains?: String;
+  fileCrypt_starts_with?: String;
+  fileCrypt_not_starts_with?: String;
+  fileCrypt_ends_with?: String;
+  fileCrypt_not_ends_with?: String;
+  status?: Status;
+  status_not?: Status;
+  status_in?: Status[] | Status;
+  status_not_in?: Status[] | Status;
   AND?: JobWhereInput[] | JobWhereInput;
   OR?: JobWhereInput[] | JobWhereInput;
   NOT?: JobWhereInput[] | JobWhereInput;
-}
-
-export interface JobUpdateManyMutationInput {
-  file?: String;
-  completed?: Boolean;
 }
 
 export interface JobSubscriptionWhereInput {
@@ -187,20 +210,21 @@ export interface NodeNode {
   id: ID_Output;
 }
 
-export interface AggregateJob {
-  count: Int;
+export interface JobEdge {
+  node: Job;
+  cursor: String;
 }
 
-export interface AggregateJobPromise
-  extends Promise<AggregateJob>,
-    Fragmentable {
-  count: () => Promise<Int>;
+export interface JobEdgePromise extends Promise<JobEdge>, Fragmentable {
+  node: <T = JobPromise>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateJobSubscription
-  extends Promise<AsyncIterator<AggregateJob>>,
+export interface JobEdgeSubscription
+  extends Promise<AsyncIterator<JobEdge>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = JobSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface BatchPayload {
@@ -222,7 +246,8 @@ export interface BatchPayloadSubscription
 export interface JobPreviousValues {
   id: ID_Output;
   file: String;
-  completed: Boolean;
+  fileCrypt: String;
+  status: Status;
 }
 
 export interface JobPreviousValuesPromise
@@ -230,7 +255,8 @@ export interface JobPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   file: () => Promise<String>;
-  completed: () => Promise<Boolean>;
+  fileCrypt: () => Promise<String>;
+  status: () => Promise<Status>;
 }
 
 export interface JobPreviousValuesSubscription
@@ -238,24 +264,8 @@ export interface JobPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   file: () => Promise<AsyncIterator<String>>;
-  completed: () => Promise<AsyncIterator<Boolean>>;
-}
-
-export interface JobEdge {
-  node: Job;
-  cursor: String;
-}
-
-export interface JobEdgePromise extends Promise<JobEdge>, Fragmentable {
-  node: <T = JobPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface JobEdgeSubscription
-  extends Promise<AsyncIterator<JobEdge>>,
-    Fragmentable {
-  node: <T = JobSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  fileCrypt: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<Status>>;
 }
 
 export interface JobSubscriptionPayload {
@@ -286,13 +296,15 @@ export interface JobSubscriptionPayloadSubscription
 export interface Job {
   id: ID_Output;
   file: String;
-  completed: Boolean;
+  fileCrypt: String;
+  status: Status;
 }
 
 export interface JobPromise extends Promise<Job>, Fragmentable {
   id: () => Promise<ID_Output>;
   file: () => Promise<String>;
-  completed: () => Promise<Boolean>;
+  fileCrypt: () => Promise<String>;
+  status: () => Promise<Status>;
 }
 
 export interface JobSubscription
@@ -300,7 +312,24 @@ export interface JobSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   file: () => Promise<AsyncIterator<String>>;
-  completed: () => Promise<AsyncIterator<Boolean>>;
+  fileCrypt: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<Status>>;
+}
+
+export interface AggregateJob {
+  count: Int;
+}
+
+export interface AggregateJobPromise
+  extends Promise<AggregateJob>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateJobSubscription
+  extends Promise<AsyncIterator<AggregateJob>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface JobConnection {
@@ -348,6 +377,12 @@ export interface PageInfoSubscription
 }
 
 /*
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+*/
+export type ID_Input = string | number;
+export type ID_Output = string;
+
+/*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
@@ -355,26 +390,24 @@ export type String = string;
 export type Long = string;
 
 /*
-The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
-export type ID_Input = string | number;
-export type ID_Output = string;
+export type Int = number;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
 
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
-
 /**
  * Model Metadata
  */
 
 export const models: Model[] = [
+  {
+    name: "Status",
+    embedded: false
+  },
   {
     name: "Job",
     embedded: false

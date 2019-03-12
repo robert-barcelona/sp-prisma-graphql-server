@@ -14,7 +14,8 @@ type BatchPayload {
 type Job {
   id: ID!
   file: String!
-  completed: Boolean!
+  fileCrypt: String!
+  status: Status!
 }
 
 type JobConnection {
@@ -25,7 +26,8 @@ type JobConnection {
 
 input JobCreateInput {
   file: String!
-  completed: Boolean!
+  fileCrypt: String!
+  status: Status!
 }
 
 type JobEdge {
@@ -38,8 +40,10 @@ enum JobOrderByInput {
   id_DESC
   file_ASC
   file_DESC
-  completed_ASC
-  completed_DESC
+  fileCrypt_ASC
+  fileCrypt_DESC
+  status_ASC
+  status_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -49,7 +53,8 @@ enum JobOrderByInput {
 type JobPreviousValues {
   id: ID!
   file: String!
-  completed: Boolean!
+  fileCrypt: String!
+  status: Status!
 }
 
 type JobSubscriptionPayload {
@@ -72,12 +77,14 @@ input JobSubscriptionWhereInput {
 
 input JobUpdateInput {
   file: String
-  completed: Boolean
+  fileCrypt: String
+  status: Status
 }
 
 input JobUpdateManyMutationInput {
   file: String
-  completed: Boolean
+  fileCrypt: String
+  status: Status
 }
 
 input JobWhereInput {
@@ -109,8 +116,24 @@ input JobWhereInput {
   file_not_starts_with: String
   file_ends_with: String
   file_not_ends_with: String
-  completed: Boolean
-  completed_not: Boolean
+  fileCrypt: String
+  fileCrypt_not: String
+  fileCrypt_in: [String!]
+  fileCrypt_not_in: [String!]
+  fileCrypt_lt: String
+  fileCrypt_lte: String
+  fileCrypt_gt: String
+  fileCrypt_gte: String
+  fileCrypt_contains: String
+  fileCrypt_not_contains: String
+  fileCrypt_starts_with: String
+  fileCrypt_not_starts_with: String
+  fileCrypt_ends_with: String
+  fileCrypt_not_ends_with: String
+  status: Status
+  status_not: Status
+  status_in: [Status!]
+  status_not_in: [Status!]
   AND: [JobWhereInput!]
   OR: [JobWhereInput!]
   NOT: [JobWhereInput!]
@@ -153,6 +176,13 @@ type Query {
   jobs(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job]!
   jobsConnection(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JobConnection!
   node(id: ID!): Node
+}
+
+enum Status {
+  COMPLETED
+  ERROR
+  IN_PROGRESS
+  WAITING
 }
 
 type Subscription {

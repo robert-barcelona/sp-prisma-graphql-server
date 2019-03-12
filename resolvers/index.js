@@ -13,7 +13,8 @@ const resolvers = {
       console.log(args)
       const job = {
         file: args.file,
-        completed: false,
+        fileCrypt: args.fileCrypt,
+        status: 'WAITING',
       }
       return await prisma.createJob(job)
     },
