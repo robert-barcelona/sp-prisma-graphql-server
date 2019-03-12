@@ -1,0 +1,22 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+
+
+type Query {
+    jobs: [ Job ] !
+}
+
+type Mutation {
+    addJob( file: String!): Job!
+    completeJob(id: ID!): Job!
+
+}
+
+type Job {
+    id: ID!
+    file: String!
+    completed: Boolean!
+}

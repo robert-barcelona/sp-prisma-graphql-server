@@ -1,0 +1,5 @@
+type Job {
+  id: ID! @unique
+  file: String!
+  completed: Boolean!
+}
