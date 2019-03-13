@@ -76,6 +76,21 @@ app.post(
   }
 );
 
+app.post(
+  '/download',
+  (req,res) => {
+    console.log(req.body.fileCrypt, req.body.file)
+    const path = `${__dirname}/output/${req.body.fileCrypt.split('.')[0]}.jpg`;
+    console.log('got this far', path)
+
+    res.download(path, req.body.file,err=> {
+      if (err) console.error(err.toString())
+      else (console.log(`downloaded file ${path}`))
+    })
+  }
+
+)
+
 
 
 
