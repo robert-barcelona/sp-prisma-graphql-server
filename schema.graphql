@@ -12,7 +12,7 @@ type Query {
 type Mutation {
     addJob( file: String!, fileCrypt: String!): Job!
     completeJob(id: ID!): Job!
-
+    deleteJob(id: ID!): Job!
 }
 
 type Job {

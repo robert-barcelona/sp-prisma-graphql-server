@@ -1,7 +1,6 @@
 const {prisma} = require('../generated/prisma-client')
 
 
-
 const resolvers = {
   Query: {
     jobs: async (parent, args, ctx, info) => {
@@ -10,7 +9,6 @@ const resolvers = {
   },
   Mutation: {
     addJob: async (parent, args) => {
-      console.log(args)
       const job = {
         file: args.file,
         fileCrypt: args.fileCrypt,
@@ -18,12 +16,15 @@ const resolvers = {
       }
       return await prisma.createJob(job)
     },
-    completeJob: async (parent, { id }) => {
+    completeJob: async (parent, {id}) => {
       return await prisma.updateJob({
-        where: { id },
-        data: { completed: true },
+        where: {id},
+        data: {completed: true},
       })
     },
+    deleteJob: async (parent, {id}) => {
+      return await prisma.deleteJob({ id})
+    }
   },
 
 }
