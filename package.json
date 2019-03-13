@@ -1,0 +1,12 @@
+{
+  "name": "socialpoint-prisma",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/robert-barcelona/sp-prisma-graphql-server.git",
+  "author": "robert-barcelona <robertanthony.bcn@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "graphql-yoga": "^1.17.4",
+    "jimp": "^0.6.0"
+  }
+}
