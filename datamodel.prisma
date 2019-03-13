@@ -1,14 +1,8 @@
-enum Status {
-   COMPLETED
-     ERROR
-     IN_PROGRESS
-     WAITING
-}
 
 
 type Job {
   id: ID! @unique
   file: String!,
   fileCrypt: String!,
-  status: Status!
+  status: String!
 }

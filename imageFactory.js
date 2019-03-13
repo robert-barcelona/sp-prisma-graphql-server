@@ -31,7 +31,7 @@ const convertImage = async job => {
     await setJobStatus(job.id, 'COMPLETED')
   } catch (err) {
     console.error(err);
-    await setJobStatus('ERROR')
+    await setJobStatus(`ERROR: ${err.toString()}`)
   }
 }
 

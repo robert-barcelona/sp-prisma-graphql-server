@@ -19,12 +19,6 @@ type Job {
     id: ID!
     file: String!
     fileCrypt: String!
-    status: Status!
+    status: String!
 }
 
-enum Status {
-    COMPLETED
-    ERROR
-    IN_PROGRESS
-    WAITING
-}
