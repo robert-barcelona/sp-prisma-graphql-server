@@ -53,4 +53,4 @@ const manageJobs = () => {
   addJobsToQueue()
 }
 
-setInterval(manageJobs, 2000)
+setInterval(manageJobs, 1000)
